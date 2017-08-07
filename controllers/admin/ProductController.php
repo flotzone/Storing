@@ -13,9 +13,28 @@ switch ($registry->requestAction) {
 		break;
 
 	case 'add':
-		$productView->addProduct('product_add');
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		 $productModel->addProduct($_POST);
+		$category = $productModel->selectCategory(); 
+		$product = $productView->showDataCategory('product_add', $category);
+		$brand = $productModel->selectBrand(); 
+		$product1 = $productView->showDataBrand('product_add', $brand);
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			$data['name'] = (isset($_POST['name'])) ? $_POST['name']:'';
+			$data['idCategory'] = (isset($_POST['idCategory'])) ? $_POST['idCategory']:'';
+			$data['idBrand'] = (isset($_POST['idBrand'])) ? $_POST['idBrand']:'';
+			$data['description'] = (isset($_POST['description'])) ? $_POST['description']:'';
+			$data['stoc'] = (isset($_POST['stoc'])) ? $_POST['stoc']:'';
+			$data['pret'] = (isset($_POST['pret'])) ? $_POST['pret']:'';
+			
+			$target_dir = "images/uploads/";
+			$filename = md5(microtime());
+
+			$imageFileType = pathinfo($_FILES["image"]['name'],PATHINFO_EXTENSION);	
+			
+			if($imageFileType == 'jpeg' || $imageFileType == 'jpg'){
+				$data['image'] = $filename . '.' . $imageFileType;
+				move_uploaded_file($_FILES['image']['tmp_name'], $target_dir . $filename . '.' . $imageFileType);
+				$productModel->addProduct($data);
+			}
 		}
 		break;
 
