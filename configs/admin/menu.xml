@@ -94,7 +94,7 @@
 			<subItems>
 				<subItem>
 					<title>Add</title>
-					<link></link>
+					<link>product/add</link>
 					<description>Add product</description>
 				</subItem>
 				<subItem>
